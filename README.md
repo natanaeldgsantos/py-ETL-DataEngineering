@@ -2,9 +2,9 @@
 
 ## Objetivo Geral
 
-Este projeto tem por objetivo demonstrar as principais formas de integração da linguagem Python com diversas ferramentas de armazenamento e gestão de dados. 
+Este projeto objetiva demonstrar algumas das principais formas de integração da linguagem Python com as principais ferramentas de armazenamento de dados. 
 
-De forma prática vamos Extrair e Transformar e Carregar dados em diversos tipos de ferramentas para bancos de dados, como bancos de dados Relacionais, bancos NoSQL em ambiente web e Big Data bem como em armazenamento de cloud.
+De forma prática, iremos Extrair, Transformar e Carregar dados em diversos tipos de bancos de dados, como Relacionais, NoSQL para web e Big Data e armazenamento em cloud.
 
 Algumas das principais ferramentas para bancos de dados por tipo são:
 
@@ -26,15 +26,15 @@ Algumas das principais ferramentas para bancos de dados por tipo são:
 
 Neste projeto vou procurar demonstrar a carga da forma mais otimizada possível em pelo menos uma ferramenta de armazenamento de cada tipo.
 
-No grupo dos bancos relacionais optei por realizar a carga no MySQL entretanto o script gerado é fácilmente adptável para qualquer outro banco relacional, bastando apenas a alteração da string de conexão e instalação dos drivers. Isso foi possível graças a ajuda da biblioteca [SQLAlchemy](https://www.sqlalchemy.org/) do Python.
+No grupo dos bancos **relacionais** optei por realizar a carga no MySQL entretanto o script gerado é fácilmente adptável para qualquer outro banco relacional, bastando apenas a alteração da string de conexão e instalação dos drivers. Isso foi possível graças a ajuda da biblioteca [SQLAlchemy](https://www.sqlalchemy.org/) do Python.
 
-No grupo dos bancos NoSQL optei por criar um exemplo para cada um dos dois mencionados. 
+No grupo dos bancos **NoSQL** optei por criar um exemplo para cada um dos dois mencionados. 
 
 No caso do MongoDB desenvolvi um script que recebe arquivos JSON, tipo comun para dados da web, tranforma os dados e carrega no banco. 
 
-No cado do HBase crie um script especifico para com a ajuda do Scoop, ferramenta de big data, realizar as cargas de dados para HDFS e tabelas no HBase.
+No cado do HBase crie um script especifico para com a ajuda do Scoop, ferramenta de *big data*,* realizar as cargas de dados para HDFS e tabelas no HBase.
 
-Finalmente para o grupo de Cloud desenvolvi um script que faz a carga de dados para um bucket no S3, o que a partir dai tornaria o dados disponível para, por exemplo, o processo de ingestão no datalake.
+Finalmente para o grupo de **Cloud** desenvolvi um script que faz a carga de dados para um bucket no S3, o que a partir dai tornaria o dados disponível para, por exemplo, o processo de ingestão no datalake.
 
 ## Descrição do Ambiente de Desenvolvimento
 
