@@ -1,0 +1,18 @@
+
+# Configuração do ambiente python
+
+pip install virtualenv
+
+# criação do ambiente
+virtualenv -p /usr/bin/python3 py_databases 
+
+# ativação do ambiente
+source py_databases/bin/activate
+
+# instalação dos pacotes
+pip install
+    pandas
+    python-dotenv
+    sqlalchemy
+    mongo
+    
