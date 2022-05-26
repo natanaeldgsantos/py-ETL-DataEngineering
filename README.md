@@ -76,7 +76,7 @@ Vamos realizar requisições as esta API, tratar os dados e armazenar no nosso M
 
 Fonte de Dados em [API Chuck Norris ](https://api.chucknorris.io/#!)
 
-### Parquet sobre Nova Yourk e seus Taxis Amarelos
+### Parquet sobre Nova York e seus Taxis Amarelos
 
 Por último estaremos extraindo arquivos parquet contendo informações sobre a circulação dos taxis amarelos na cidade de Nova Yourk. 
 
