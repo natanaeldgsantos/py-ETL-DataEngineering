@@ -15,4 +15,6 @@ pip install
     python-dotenv
     sqlalchemy
     mongo
+    pymysql
+    cryptography
     

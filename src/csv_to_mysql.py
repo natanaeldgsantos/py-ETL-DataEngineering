@@ -9,10 +9,11 @@ from   sqlalchemy.exc import SQLAlchemyError
 
 # Importando arquivo de configurações com variáveis de ambiente sensíveis
 from dotenv import load_dotenv
-load_dotenv() # lê as variáveis de ambiente
+load_dotenv()
 
 WORK_DIR = os.getcwd()
 DATA_DIR = os.path.join(WORK_DIR,'data')
+
 
 # Gera conexão com o SGBD - MySQL
 def mysql_connection():
@@ -26,17 +27,15 @@ def mysql_connection():
 
     dialect  = 'mysql'
     driver   = 'pymysql'
-    user     = os.getenv("USER")
+    user     = os.getenv("USER_DB")
     password = os.getenv("PASSWORD")
     host     = 'localhost'
     port     = 3306
-    database = 'db_teste'
+    database = 'ny_taxi'
 
     # String de conexão com o SGBD
     string = f'{dialect}+{driver}://{user}:{password}@{host}:{port}/{database}'
-    print()
-    print('* ',string)
-
+    print(string)
     connection = None
 
     try:
@@ -67,9 +66,9 @@ def padroniza_tabela(file_name):
 # Carga de dados - upload das tabelas
 def data_upload():
 
-    connection = mysql_connection()
+    connection = mysql_connection().execution_options( autocommit = True)
 
-    for file_name in os.listdir(DATA_DIR):
+    for file_name in os.listdir(os.path.join(DATA_DIR,'olist')):
 
         if file_name.endswith('.csv'):
             
@@ -77,12 +76,14 @@ def data_upload():
             table_name = padroniza_tabela(file_name)
 
             # Gera o Dataframe        
-            df_tmp = pd.read_csv(os.path.join(DATA_DIR,file_name))
+            df_tmp = pd.read_csv(os.path.join(DATA_DIR,'olist',file_name))
             df_tmp['upload_datetime'] = datetime.now().isoformat()
         
             # Cria e carrega tabela
             df_tmp.to_sql(name=table_name, con= connection ,if_exists='replace')
+            print('* Tabela {} carregada ... '.format(table_name))
 
+    connection.close()
     print('Carga de Dados executada com Sucesso')
 
 data_upload()
