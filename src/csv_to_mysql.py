@@ -1,6 +1,8 @@
 
+from ast import While
 import pandas as pd
 import os
+from   time import time
 from   datetime import datetime
 
 # Database Integration
@@ -18,12 +20,8 @@ DATA_DIR = os.path.join(WORK_DIR,'data')
 # Gera conexão com o SGBD - MySQL
 def mysql_connection():
 
-    """
-
-    in  - Não recebe nenhum parâmetro
-    out - return connection - retorna conexão validada com o banco de dados
-
-    """
+    # in  - Não recebe nenhum parâmetro
+    # out - return connection - retorna conexão validada com o banco de dados
 
     dialect  = 'mysql'
     driver   = 'pymysql'
@@ -35,7 +33,7 @@ def mysql_connection():
 
     # String de conexão com o SGBD
     string = f'{dialect}+{driver}://{user}:{password}@{host}:{port}/{database}'
-    print(string)
+    
     connection = None
 
     try:
@@ -53,12 +51,9 @@ def mysql_connection():
 # Padroniza o nome das tabelas
 def padroniza_tabela(file_name):
 
-    """
-    in  - filename: recebe o nome dos arquivos a serem padronizados
-    out - retorna o nome da tabela padronizado
+    #in  - filename: recebe o nome dos arquivos a serem padronizados
+    #out - retorna o nome da tabela padronizado    
     
-    """
-
     table_name = "tb_" + file_name.strip('.csv').replace('olist_','').replace('_dataset','')
 
     return table_name
@@ -70,20 +65,48 @@ def data_upload():
 
     for file_name in os.listdir(os.path.join(DATA_DIR,'olist')):
 
-        if file_name.endswith('.csv'):
+        if file_name.endswith('.csv'): # filtra somente arquivos csv
             
             # Padroniza nome da tabela
             table_name = padroniza_tabela(file_name)
 
-            # Gera o Dataframe        
-            df_tmp = pd.read_csv(os.path.join(DATA_DIR,'olist',file_name))
-            df_tmp['upload_datetime'] = datetime.now().isoformat()
-        
-            # Cria e carrega tabela
-            df_tmp.to_sql(name=table_name, con= connection ,if_exists='replace')
-            print('* Tabela {} carregada ... '.format(table_name))
+            # Caminho até o arquivo
+            file_path = os.path.join(DATA_DIR,'olist',file_name)  
 
-    connection.close()
+            # Criando um iterador para ler data em Chunks   
+            df_iter = pd.read_csv(file_path, iterator=True, chunksize= 10000)    
+
+            # Se tabela já existir overwrite
+            df = pd.read_csv(file_path, nrows=500)
+            df['upload_datetime'] = datetime.now().isoformat()
+            df.head(n=0).to_sql(con = connection, name= table_name, if_exists='replace')            
+
+            cont = 0 # contador de chunks
+            go = True
+
+            try:
+                # Carregando Dados em Chunks
+                while go:
+                    
+                    cont+=1
+                    #monitora tempo de carga
+                    t_start = time()
+
+                    df_tmp = next(df_iter)
+                    df_tmp['upload_datetime'] = datetime.now().isoformat()
+
+                    df_tmp.to_sql(name = table_name, con = connection, if_exists='append')
+
+                    t_end = time()
+                    print('  - >  Carga número {:02d} realizada com sucesso em {:.3f} segundos'.format(cont,t_end - t_start))            
+                        
+            except StopIteration:
+                go = False
+
+            print()
+            print('* Tabela {} carregada ... '.format(table_name))
+            
+    print()
     print('Carga de Dados executada com Sucesso')
 
 data_upload()
